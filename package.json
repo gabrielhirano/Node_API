@@ -1,0 +1,22 @@
+{
+  "name": "node_api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gabrielhirano/API_Node.git"
+  },
+  "keywords": [
+    "api_node"
+  ],
+  "author": "Gabriel Hirano",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gabrielhirano/API_Node/issues"
+  },
+  "homepage": "https://github.com/gabrielhirano/API_Node#readme"
+}
