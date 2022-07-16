@@ -20,7 +20,9 @@
   },
   "homepage": "https://github.com/gabrielhirano/API_Node#readme",
   "dependencies": {
-    "express": "^4.18.1"
+    "express": "^4.18.1",
+    "mongodb": "^4.8.0",
+    "mongoose": "^6.4.4"
   },
   "devDependencies": {
     "nodemon": "^2.0.19"
