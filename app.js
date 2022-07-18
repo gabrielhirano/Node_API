@@ -23,8 +23,17 @@ mongoose.connect('mongodb://localhost/api',{
 app.use(express.json());
 // criando rota
 app.get("/", (req,res)=>{
-    return res.json({titulo: "como criar uma API!!!!"})
+    //constante recebendo a models, find buscando todos registros com 0 restrições, then caso consiga executar com sucesso e retornar receba os dados para retornar
+    Artigo.find({}).then((artigo) => {
+        return res.json(artigo)
+    }).catch((err) => {
+        return res.status(400).json({
+            error: true,
+            message: "Nenhum artigo encontrado!"
+        })
+    })
 });
+
 app.post("/artigo", (req,res) => {
     const artigo = Artigo.create(req.body, (err) => {
         if(err) return res.status(400).json({
