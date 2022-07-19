@@ -21,7 +21,8 @@ mongoose.connect('mongodb://localhost/api',{
 
 // permitir acesso do dado no formato JSON
 app.use(express.json());
-// criando rota
+
+//Listar
 app.get("/", (req,res)=>{
     //constante recebendo a models, find buscando todos registros com 0 restrições, then caso consiga executar com sucesso e retornar receba os dados para retornar
     Artigo.find({}).then((artigo) => {
@@ -33,7 +34,20 @@ app.get("/", (req,res)=>{
         })
     })
 });
-
+//Visualizar
+app.get("/artigo/:id", (req,res) => {
+    Artigo.findOne({id: req.params.id
+    }).then((artigo) => {
+        return res.json(artigo)
+    }).catch((err) =>{
+        return res.status(400).json({
+            error: true,
+            message: "Nenhum artigo encontrado!"
+        })
+    })
+    //req.params.id
+})
+//Cadastrar
 app.post("/artigo", (req,res) => {
     const artigo = Artigo.create(req.body, (err) => {
         if(err) return res.status(400).json({
