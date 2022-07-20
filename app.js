@@ -23,7 +23,7 @@ mongoose.connect('mongodb://localhost/api',{
 app.use(express.json());
 
 //Listar
-app.get("/", (req,res)=>{
+app.get("/read/", (req,res)=>{
     //constante recebendo a models, find buscando todos registros com 0 restrições, then caso consiga executar com sucesso e retornar receba os dados para retornar
     Artigo.find({}).then((artigo) => {
         return res.json(artigo)
@@ -35,7 +35,7 @@ app.get("/", (req,res)=>{
     })
 });
 //Visualizar
-app.get("/artigo/:id", (req,res) => {
+app.get("/read/:id", (req,res) => {
     Artigo.findOne({id: req.params.id
     }).then((artigo) => {
         return res.json(artigo)
@@ -45,18 +45,29 @@ app.get("/artigo/:id", (req,res) => {
             message: "Nenhum artigo encontrado!"
         })
     })
-    //req.params.id
 })
 //Cadastrar
-app.post("/artigo", (req,res) => {
+app.post("/insert", (req,res) => {
     const artigo = Artigo.create(req.body, (err) => {
         if(err) return res.status(400).json({
             error: true,
             message: "Erro: Artigo não foi cadastrado com sucesso com sucesso!"
         })
-        return res.status(400).json({
+        return res.status(201).json({
             error: false,
             message: "Artigo cadastrado com sucesso com sucesso!"
+        })
+    })
+})
+app.put("/update/:id", (req, res) => {
+    const artigo = Artigo.updateOne({_id: req.params.id}, req.body, (err)=> {
+        if(err) return res.status(400).json({
+            error: true,
+            message:"Error: Sem exito para editar artigo"
+        })
+        return res.json({
+            error: false,
+            message: "Artigo alterado com sucesso!"
         })
     })
 })
