@@ -1,14 +1,25 @@
 // incluindo dependencias
-const { response } = require('express');
 const express = require('express');
+const cors = require('cors')
 const mongoose = require('mongoose')
 
 //
-require("./models/Artigo")
-const Artigo = mongoose.model('artigo');
+require("./models/Geometry")
+const Geometry = mongoose.model('geometry');
 
 // executar funcao do express
 const app = express();
+
+// permitir acesso do dado no formato JSON
+app.use(express.json());
+
+// adiconando cors para permitir as url para requisição da API
+// app.use((req, res, next) => {
+//     res.header("Acess-Control-Allow-Origin", "*");
+//     req.header("Acess-Control-Allow-Methods", "GET, PUT, POST, DELETE")
+//     app.use(cors());
+//     next();
+// })
 
 mongoose.connect('mongodb://localhost/api',{
     useNewUrlParser: true,
@@ -19,14 +30,11 @@ mongoose.connect('mongodb://localhost/api',{
     console.log("Erro: Conexão com MongoDB não realizada com!")
 })
 
-// permitir acesso do dado no formato JSON
-app.use(express.json());
-
 //Listar
-app.get("/read/", (req,res)=>{
+app.get("/geometry", (req,res)=>{
     //constante recebendo a models, find buscando todos registros com 0 restrições, then caso consiga executar com sucesso e retornar receba os dados para retornar
-    Artigo.find({}).then((artigo) => {
-        return res.json(artigo)
+    Geometry.find({}).then((geometry) => {
+        return res.json(geometry)
     }).catch((err) => {
         return res.status(400).json({
             error: true,
@@ -34,11 +42,12 @@ app.get("/read/", (req,res)=>{
         })
     })
 });
+
 //Visualizar
-app.get("/read/:id", (req,res) => {
-    Artigo.findOne({id: req.params.id
-    }).then((artigo) => {
-        return res.json(artigo)
+app.get("/geometry/:id", (req,res) => {
+    Geometry.findOne({id: req.params.id
+    }).then((geometry) => {
+        return res.json(geometry)
     }).catch((err) =>{
         return res.status(400).json({
             error: true,
@@ -46,9 +55,10 @@ app.get("/read/:id", (req,res) => {
         })
     })
 })
-//Cadastrar
-app.post("/insert", (req,res) => {
-    const artigo = Artigo.create(req.body, (err) => {
+
+// Cadastrar
+app.post("/geometry", (req,res) => {
+    const geometry = Geometry.create(req.body, (err) => {
         if(err) return res.status(400).json({
             error: true,
             message: "Erro: Artigo não foi cadastrado com sucesso com sucesso!"
@@ -59,8 +69,10 @@ app.post("/insert", (req,res) => {
         })
     })
 })
-app.put("/update/:id", (req, res) => {
-    const artigo = Artigo.updateOne({_id: req.params.id}, req.body, (err)=> {
+
+// Editar
+app.put("/geometry/:id", (req, res) => {
+    const geometry = Geometry.updateOne({_id: req.params.id}, req.body, (err)=> {
         if(err) return res.status(400).json({
             error: true,
             message:"Error: Sem exito para editar artigo"
@@ -71,6 +83,22 @@ app.put("/update/:id", (req, res) => {
         })
     })
 })
+
+// Deletar
+app.delete("/geometry/:id", (req, res) => {
+    const artigo = Geometry.deleteOne({_id: req.params.id}, (err) =>{
+        if(err) return res.status(400).json({
+            error: true,
+            message: "Error: Elemento não obteve exito para excluir o elemento!"
+        })
+        return res.json({
+            error: false,
+            message: "Elemento excluido com sucesso!"
+        })
+    })
+})
+
+
 // para ver o resultado precisa rodar o servidor
 // para isso precisa da funcao listener para expor a porta
 app.listen(8080, () =>{
